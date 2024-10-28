@@ -1,4 +1,6 @@
-import { type ClientSchema, a, defineData } from "@aws-amplify/backend";
+import { type ClientSchema, a, defineData } from '@aws-amplify/backend'
+import { createTodo2 } from './createTodo2/resource.js'
+import { authorize } from './authorize/resource.js'
 
 /*== STEP 1 ===============================================================
 The section below creates a Todo database table with a "content" field. Try
@@ -6,25 +8,46 @@ adding a new "isDone" field as a boolean. The authorization rule below
 specifies that any user authenticated via an API key can "create", "read",
 "update", and "delete" any "Todo" records.
 =========================================================================*/
-const schema = a.schema({
-  Todo: a
-    .model({
-      content: a.string(),
-    })
-    .authorization((allow) => [allow.publicApiKey()]),
-});
+const schema = a
+  .schema({
+    Todo: a
+      .model({
+        content: a.string(),
+        userId: a.id().required(),
+        user: a.belongsTo('User', 'userId'),
+      })
+      .authorization(allow => [allow.custom()]),
 
-export type Schema = ClientSchema<typeof schema>;
+    User: a
+      .model({
+        name: a.string().required(),
+        todos: a.hasMany('Todo', 'userId'),
+      })
+      .authorization(allow => [allow.custom()]),
+
+    createTodo2: a
+      .mutation()
+      .arguments({})
+      .handler(a.handler.function(createTodo2).async())
+      .authorization(allow => [allow.publicApiKey()]),
+  })
+  .authorization(allow => [allow.resource(createTodo2)])
+
+export type Schema = ClientSchema<typeof schema>
 
 export const data = defineData({
   schema,
   authorizationModes: {
-    defaultAuthorizationMode: "apiKey",
+    defaultAuthorizationMode: 'apiKey',
+    lambdaAuthorizationMode: {
+      function: authorize,
+      timeToLiveInSeconds: 0,
+    },
     apiKeyAuthorizationMode: {
       expiresInDays: 30,
     },
   },
-});
+})
 
 /*== STEP 2 ===============================================================
 Go to your frontend source code. From your client-side code, generate a

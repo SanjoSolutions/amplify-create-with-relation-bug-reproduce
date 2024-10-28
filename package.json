@@ -1,9 +1,10 @@
 {
-  "name": "aws-amplify-gen2",
+  "name": "create-with-relation-bug-reproduce",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "dev-cloud": "ampx sandbox",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"

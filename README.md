@@ -20,6 +20,14 @@ For detailed instructions on deploying your application, refer to the [deploymen
 
 See [CONTRIBUTING](CONTRIBUTING.md#security-issue-notifications) for more information.
 
+## GraphQL client for Lambda
+
+It was generated with:
+
+```sh
+npx ampx generate graphql-client-code --out amplify/graphql
+```
+
 ## License
 
 This library is licensed under the MIT-0 License. See the LICENSE file.
