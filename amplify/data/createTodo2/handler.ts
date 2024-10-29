@@ -63,6 +63,7 @@ export const handler: Schema['createTodo2']['functionHandler'] = async (
     })
 
     console.log('result', result)
+    console.log('user', result.data.createTodo.user)
   } catch (error: any) {
     console.error('error', error)
   }

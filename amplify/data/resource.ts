@@ -16,14 +16,14 @@ const schema = a
         userId: a.id().required(),
         user: a.belongsTo('User', 'userId'),
       })
-      .authorization(allow => [allow.custom()]),
+      .authorization(allow => [allow.authenticated()]),
 
     User: a
       .model({
         name: a.string().required(),
         todos: a.hasMany('Todo', 'userId'),
       })
-      .authorization(allow => [allow.custom()]),
+      .authorization(allow => [allow.authenticated()]),
 
     createTodo2: a
       .mutation()
